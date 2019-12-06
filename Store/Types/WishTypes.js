@@ -1,0 +1,2 @@
+export const ADDWISHLIST="ADDWISHLIST";
+export const WISHERROR="WISHERROR";
