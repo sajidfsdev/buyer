@@ -104,10 +104,14 @@ const Cart=(props)=>{
             const body=JSON.stringify({
                 buyerId:id_RP,
                 vendorId:cartList[0].vendorId._id,
+                vendorLat:cartList[0].vendorId.Lat,
+                vendorLong:cartList[0].vendorId.Long,
                 products:products,
                 status:"PENDING"
             });
 
+            
+          
 
             //try catch starts here......
             try

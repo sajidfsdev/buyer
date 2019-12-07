@@ -67,7 +67,10 @@ const PendingView=(props)=>{
             const body=JSON.stringify({
                 id:id_RP,
                 latitude:loc.coords.latitude,
-                longitude:loc.coords.longitude
+                longitude:loc.coords.longitude,
+                vendorLat:props.request.vendorLat,
+                vendorLong:props.request.vendorLong
+             
             });
 
 
@@ -262,7 +265,12 @@ const PendingView=(props)=>{
 
     {/* Image View Starts Here.... */}
     <View style={styles.simageView}>
-        <Image style={styles.simage} source={require('../../assets/images/waves.gif')} />
+        <Image style={styles.simage} 
+        // source={require('../../assets/images/waves.gif')} 
+        source={{
+            uri:'https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwjAv9fKzqLmAhW1DWMBHWJbDj0QjRx6BAgBEAQ&url=https%3A%2F%2Fsteemit.com%2Finventions%2F%40kid4life%2F5-inventions-that-changed-the-world-nikola-tesla-radio&psig=AOvVaw35uv-1WcsHHZhx6SLbnROX&ust=1575776371810545'
+        }}
+        />
     </View>
     {/* Image View Ends Here...... */}
 
