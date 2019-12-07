@@ -106,6 +106,7 @@ const Cart=(props)=>{
                 vendorId:cartList[0].vendorId._id,
                 vendorLat:cartList[0].vendorId.Lat,
                 vendorLong:cartList[0].vendorId.Long,
+                outletName:cartList[0].vendorId.outletName,
                 products:products,
                 status:"PENDING"
             });

@@ -65,13 +65,18 @@ const PendingView=(props)=>{
 
             //body setup......
             const body=JSON.stringify({
-                id:id_RP,
+                id:props.request._id,
                 latitude:loc.coords.latitude,
                 longitude:loc.coords.longitude,
                 vendorLat:props.request.vendorLat,
-                vendorLong:props.request.vendorLong
+                vendorLong:props.request.vendorLong,
+                outletName:props.request.outletName
              
             });
+
+            console.log("LAST CHECK FROM BUYER");
+            console.log("CHECK AND MATCH REQUEST ID");
+            console.log(props.request._id);
 
 
             //try catch starts here........
