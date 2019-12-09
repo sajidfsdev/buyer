@@ -107,10 +107,15 @@ const Cart=(props)=>{
                 vendorLat:cartList[0].vendorId.Lat,
                 vendorLong:cartList[0].vendorId.Long,
                 outletName:cartList[0].vendorId.outletName,
+                vendorPh:cartList[0].vendorId.mobileOne,
+                vendorName:cartList[0].vendorId.fsName+" "+cartList[0].vendorId.lsName,
                 products:products,
                 status:"PENDING"
             });
 
+            console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+            console.log(cartList[0].vendorId.mobileOne);
+            console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
             
           
 

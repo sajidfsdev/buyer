@@ -1,7 +1,8 @@
 import React,{ useEffect } from 'react';
-import { View,Text,StyleSheet,YellowBox } from 'react-native';
+import { View,Text,StyleSheet,YellowBox,Alert } from 'react-native';
 import { useSelector,useDispatch } from 'react-redux';
 import * as Types from '../Store/Types/Request';
+import * as Actions from '../Store/Actions/Request';
 
 
 import SignInNavigator from '../Navigations/SignInNav';
@@ -14,6 +15,7 @@ import Soc from '../Constants/Socket';
 const secondGrid=(props)=>{
 
     const id_RP=useSelector(state=>state.auth.id);
+    const token_RP=useSelector(state=>state.auth.token);
     const request_RP=useSelector(state=>state.request.request);
     const dispatch=useDispatch();
 
@@ -24,6 +26,97 @@ const secondGrid=(props)=>{
     //redux props starts here...
     const appAuth_RP=useSelector(state=>state.auth.appAuth);
     //redux props ends here.....
+
+
+    //Use effect starts here............
+    useEffect(()=>{
+
+        //Registering Navigator starts here..........
+        navigator.geolocation.watchPosition(
+            position => {
+            console.log("////////////////////////////////////");
+            console.log("///////////BUYER'S DETECTED////////");
+             console.log(position.coords.latitude);
+             console.log(position.coords.longitude);
+             Alert.alert("POSITIONING CHANGE DETECTED");
+
+             if(request_RP.status==="TRIPONE")
+             {
+                 Alert.alert("TRIPONE DETECTED");
+                 handleSendLocToRider(position.coords.latitude,position.coords.longitude);
+             }
+             
+                 dispatch(Actions.handleSetMyLatLong(
+                    position.coords.latitude,
+                    position.coords.longitude
+                 ));
+             
+            console.log("/////////////////////////////////////");
+            console.log("/////////////////////////////////////");
+            }, 
+            error => console.log(error),
+            { 
+              enableHighAccuracy: true,
+              timeout: 20000,
+              maximumAge: 1000,
+              distanceFilter:0.2
+            }
+           );
+        //Registering Navigator ends here............
+    },[]);
+    //use effect ends here..............
+
+
+    //Handle send locs to rider starts here.......
+    const handleSendLocToRider=async (lat,long)=>{
+
+        const riderId=request_RP.riderId;
+
+        //config setup......
+        const config={
+            headers:{
+                'Content-Type':'application/json',
+                'b-auth-humtoken':token_RP
+            }
+        };
+
+
+        //body setup........
+        const body=JSON.stringify({
+            riderId:riderId,
+            lat:parseFloat(lat),
+            long:parseFloat(long)
+        });
+
+
+        //try catch starts here.......
+        try
+        {
+            const res=axios.post(API.server+"/buyer/request/sendMyLocToRider",body,config);
+
+            if(res)
+            {
+                Alert.alert("LOCS SEND TO RIDER SUCCESSFULLY");
+            }
+            else
+            {
+                Alert.alert("FAILED SEND LOC","NETWORK ERROR");
+            }
+        }
+        catch(err)
+        {
+            if(err.response)
+            {
+                Alert.alert("FAILEDSENDLOC",err.response.data.errorMessage);
+            }
+            else
+            {
+                Alert.alert("FAILEDSENDLOC",err.message);
+            }
+        }
+        //try catch ends here.........
+    }
+    //Handle send locs to rider endds here........
 
 
     //gui manipulation starts here...
@@ -49,6 +142,11 @@ const secondGrid=(props)=>{
                 type:"BUYER"
             }
         });
+
+
+        //NAVIGATION MONITOR STARTS HERE...........
+        
+        //NAVIGATION MONITOR ENDS HERE.............
 
 
 
@@ -92,6 +190,22 @@ const secondGrid=(props)=>{
                     request:JSON.parse(JSON.stringify(data.request))
                 }
             });
+        });
+
+
+        io.on("RECEIVERIDERLOC",(data)=>{
+            console.log("LAT SHARED FROM RIDER");
+            console.log("&&&&&&&&&&&&&&&&&&&&&&&");
+            console.log("&&&&&&&&&&&&&&&&&&&&&&&&");
+            console.log("&&&&&&&&&&&&&&&&&&&&&&&&");
+            console.log(data.lat);
+            console.log(data.long);
+
+            dispatch(Actions.handleUpdateRiderLatLong(
+                parseFloat(data.lat),
+                parseFloat(data.long)
+            ));
+            
         });
         //SETTING LISTENER FOR APPROVED/REJECTED RESPONSE Ends.......
 

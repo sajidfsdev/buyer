@@ -194,3 +194,67 @@ export const handleChangeRequestStatus=(buyerId,status,token)=>{
     //try catch ends here........
 }
 //Handle change request status ends here.......
+
+
+
+
+
+
+//Handle set my LAT LONG starts here.........
+export const handleSetMyLatLong=(lat,long)=>{
+
+    //return dispatch starts here.....
+    return (dispatch,getState)=>{
+
+        //old request....
+        const req=JSON.parse(JSON.stringify(getState().request.request));
+        req.buyerLat=lat;
+        req.buyerLong=long;
+
+        //dispatching to set my own lat long....
+        dispatch({
+            type:Types.SET_MY_PERSONAL_LAT_LONG,
+            payload:{
+                lat:parseFloat(lat),
+                long:parseFloat(long)
+            }
+        });
+
+        //dispatching to set New LOC Locally.....
+        dispatch({
+            type:Types.REQUESTLOADEDWITHSUCCESS,
+            payload:{
+                request:JSON.parse(JSON.stringify(req))
+            }
+        });
+        //dispatching to set New LOC locally....
+    }
+    //return dispatch ends here.......
+
+}
+//Handle set my Lat Long ends here...........
+
+
+
+
+
+//Handle Update Rider Lat Long starts here.......
+export const handleUpdateRiderLatLong=(lat,long)=>{
+
+    
+    //return starts here.......
+    return (dispatch,getState)=>{
+        let req=JSON.parse(JSON.stringify(getState().request.request));
+        req.riderLat=parseFloat(lat);
+        req.riderLong=parseFloat(long);
+
+        dispatch({
+            type:Types.UPDATEREQUEST,
+            payload:{
+                request:JSON.parse(JSON.stringify(req))
+            }
+        });
+    }
+    //return ends here.........
+}
+//Handle update Rider Lat Long Ends Here.........

@@ -11,6 +11,10 @@ import * as Types from '../../Store/Types/Request';
 import * as Action from '../../Store/Actions/Request';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
+
+//importing component starts here......
+import TRIPONE from '../../Component/Request/TripOne';
+//compoenet ends.......................
 //receiving props request
 let inter=null;
 
@@ -475,9 +479,7 @@ const PendingView=(props)=>{
     {
         return (
             <React.Fragment>
-                <View>
-                    <Text>TRIP ONE DETECTED</Text>
-                </View>
+                <TRIPONE />
             </React.Fragment>
         );
 
