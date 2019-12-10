@@ -258,3 +258,77 @@ export const handleUpdateRiderLatLong=(lat,long)=>{
     //return ends here.........
 }
 //Handle update Rider Lat Long Ends Here.........
+
+
+
+
+
+
+
+//Hanle set my LOC BOOK to Rider starts here......
+export const sendMyLocBookToRider=(lat,long)=>{
+
+    //return starts here.....
+    return async (dispatch,getState)=>{
+        const status=getState().request.request.status;
+        const token=getState().auth.token;
+        console.log("REDUX--&%(*(*&()&()*_)*_)*)(&(*^*&%^&$%^#^%");
+        console.log(status);
+        if(status==="TRIPONE")
+        {
+            console.log("TRIP ONE DETECTED SUCCESSFULLY");
+            const riderId=getState().request.request.riderId;
+            //config setup......
+        const config={
+            headers:{
+                'Content-Type':'application/json',
+                'b-auth-humtoken':token
+            }
+        };
+
+
+        //body setup........
+        const body=JSON.stringify({
+            riderId:riderId,
+            lat:parseFloat(lat),
+            long:parseFloat(long)
+        });
+
+        //try catch starts here.........
+        try
+        {
+            const res=await axios.post(API.server+"/buyer/request/sendMyLocToRider",body,config);
+
+            if(res)
+            {
+                Alert.alert("LOCS SEND TO RIDER SUCCESSFULLY");
+                dispatch({type:Types.NOTHING});
+            }
+            else
+            {
+                Alert.alert("FAILED SEND LOC","NETWORK ERROR");
+                dispatch({type:Types.NOTHING});
+            }
+        }
+        catch(err)
+        {
+
+            if(err.response)
+            {
+                Alert.alert("FAILEDSENDLOCERRRESP",err.response.data.errorMessage);
+                dispatch({type:Types.NOTHING});
+            }
+            else
+            {
+                Alert.alert("FAILEDSENDLOCERR",err.message);
+                dispatch({type:Types.NOTHING});
+            }
+        }
+        //try catch ends here............
+
+
+        }
+    }
+    //return ends here.......
+}
+//Hanle set my Loc BOOK to Rider ends here........

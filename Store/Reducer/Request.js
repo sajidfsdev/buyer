@@ -80,6 +80,12 @@ const requestReducer=(state=initialState,action)=>{
             };
             break;
 
+        case Types.NOTHING:
+            return {
+                ...state
+            };
+            break;
+
 
 
     }//switch statement ends here.....

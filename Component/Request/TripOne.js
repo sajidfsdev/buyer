@@ -1,30 +1,89 @@
 import React,{ useState } from 'react';
-import { View,Text,StyleSheet,ScrollView,Dimensions,Button } from 'react-native';
+import { View,Text,StyleSheet,ScrollView,Dimensions,Button,TextInput,Alert } from 'react-native';
 import MapView,{ PROVIDER_GOOGLE,Marker, PROVIDER_DEFAULT } from 'react-native-maps';
 import { useSelector,useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Linking } from 'expo';
 import MapViewDirections from 'react-native-maps-directions';
 import MapKey from '../../Constants/Maps';
+import axios from 'axios';
+import AppLoading from '../../Reusable/AppLoading';
+import API from '../../Constants/API';
 
 const TripOneView=(props)=>{
 
     //state management starts here.....
     const [mapRef,setMapRef]=useState();
+    const [appState,setAppState]=useState(1);//1 TRIP ONE
+                                            //2 loading
+                                            //3 Rider Reached
+    const [codeState,setCodeState]=useState(null);
+    const [enteredCodeState,setEnteredCodeState]=useState("");
     //state management ends here.......
 
     //redux state starts here.....
     const latitude_RP=useSelector(state=>state.request.latitude);
     const longitude_RP=useSelector(state=>state.request.longitude);
     const request_RP=useSelector(state=>state.request.request);
+    const token_RP=useSelector(state=>state.auth.token);
     //redux state ends here.......
 
 
     //Handle Cancel Ride Starts....
-    const handleControlBuyerReached=()=>{
+    const handleControlBuyerReached=async ()=>{
+        setAppState(2);
 
+        //config starts here.....
+        const config={
+            headers:{
+                'Content-Type':'application/json',
+                'b-auth-humtoken':token_RP
+            }
+        };
+
+        //body starts......
+        const body=JSON.stringify({
+            requestId:request_RP._id
+        });
+
+        //try catch starts here.....
+        try
+        {
+            const res=await axios.post(API.server+"/buyer/request/riderCome",body,config);
+
+            if(res)
+            {
+                setAppState(3);
+                setCodeState(res.data.code);
+                setEnteredCodeState(res.data.code);
+            }
+            else
+            {
+                setAppState(1);
+                Alert.alert("NETWORK ERROR");
+            }
+        }
+        catch(err)
+        {
+            setAppState(1);
+            if(err.response)
+            {
+                Alert.alert("ERROR",err.response.data.errorMessage);
+            }
+            else
+            {
+                Alert.alert("ERROR",err.message);
+            }
+        }
+        //try catch ends here.......
     }
     //Handle Cancel Ride Ends......
+
+    //Handle entered code state......
+    const handleEnteredCodeChange=(enteredCode)=>{
+        setEnteredCodeState(enteredCode);
+    }
+    //Handle enetre code state ends here....
 
 
     //Handle Phone Call starts here......
@@ -46,9 +105,15 @@ const TripOneView=(props)=>{
     }
     //handle return to map ends here...
 
-    //return starts here......
-    return (
-        <ScrollView style={styles.container}>
+
+    //Main GUI man starts here........
+    let mainGUI=null;
+
+    if(appState===1)
+    {
+        mainGUI=(
+            <React.Fragment>
+                        <ScrollView style={styles.container}>
             
             {/* Title View Starts Here..... */}
             <View style={styles.titleView}>
@@ -160,6 +225,66 @@ const TripOneView=(props)=>{
 
 
         </ScrollView>
+            </React.Fragment>
+        );
+    }
+    else
+    if(appState===2)
+    {
+        mainGUI=(
+            <React.Fragment>
+                <AppLoading />
+            </React.Fragment>
+        );
+    }
+    else
+    if(appState===3)
+    {
+        mainGUI=(
+            <React.Fragment>
+                <View style={styles.tvContainer}>
+                    
+                    {/* Title View Starts Here...... */}
+                    <View style={styles.tvTitleView}>
+                        <Text style={styles.tvTitle}>
+                            Enter Security Code
+                        </Text>
+                    </View>
+                    {/* Title View Ends Here........ */}
+
+
+                    {/* SubTitleView starts here.... */}
+                    <View style={styles.tvSubTitleView}>
+                        <Text style={styles.tvSubTitle}>
+                            Ask Rider To Tell Security Code
+                        </Text>
+                    </View>
+                    {/* subTitleView ends here...... */}
+
+
+                    {/* Text Field Starts Here....... */}
+                    <TextInput value={enteredCodeState} onChangeText={handleEnteredCodeChange} keyboardType="default" style={styles.tvTextField} />
+                    {/* Text Field Ends Here........ */}
+
+
+                    {/* Button View Starts Here........ */}
+                    <View style={styles.tvBtnView}>
+                        <Button onPress={()=>{setAppState(1);setEnteredCodeState("");setCodeState(null)}} title="Cancel" color="blue"/>
+                        <Button title="Check" color="green"/>
+                    </View>
+                    {/* Button View Ends Here.......... */}
+
+                </View>
+            </React.Fragment>
+        );
+    }
+    //Main GUI ends here..............
+
+    //return starts here......
+    return (
+        <React.Fragment>
+            {mainGUI}
+        </React.Fragment>
     );
     //return ends here........
 
@@ -247,6 +372,57 @@ const styles=StyleSheet.create({
         justifyContent:'space-between',
         marginTop:10
     },
+
+    tvContainer:{
+        flex:1,
+        paddingLeft:20,
+        paddingRight:20
+    },
+
+    tvTitleView:{
+        width:'100%',
+        flexDirection:'row',
+        paddingTop:10,
+        justifyContent:'flex-start',
+        marginTop:10
+    },
+
+    tvTitle:{
+        fontFamily:'roboto-regular',
+        fontSize:20,
+        color:'green'
+    },
+
+
+    tvSubTitleView:{
+        width:'100%',
+        flexDirection:'row',
+        justifyContent:'flex-start'
+    },
+
+    tvSubTitle:{
+        fontFamily:'roboto-regular',
+        fontSize:12
+    },
+
+    tvTextField:{
+        width:'100%',
+        marginTop:20,
+        borderWidth:1,
+        padding:5,
+        fontSize:15
+    },
+
+
+    tvBtnView:{
+        width:'100%',
+        flexDirection:'row',
+        justifyContent:'space-between',
+        marginTop:30
+    }
+
+
+    
 
     
 });

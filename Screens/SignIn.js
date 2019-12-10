@@ -153,7 +153,7 @@ const SignIn=(props)=>{
                 </View>
 
                 <View style={styles.inputView}>
-                    <TextInput onChangeText={handlePassInput} value={passState} keyboardType="default" style={{...styles.input,borderColor:Colors.welcomeBack}} placeholder="Password" />
+                    <TextInput secureTextEntry={true} onChangeText={handlePassInput} value={passState} keyboardType="default" style={{...styles.input,borderColor:Colors.welcomeBack}} placeholder="Password" />
                 </View>
 
 

@@ -38,23 +38,22 @@ const secondGrid=(props)=>{
             console.log("///////////BUYER'S DETECTED////////");
              console.log(position.coords.latitude);
              console.log(position.coords.longitude);
-             Alert.alert("POSITIONING CHANGE DETECTED");
+             //Alert.alert("POSITIONING CHANGE DETECTED");
 
-             if(request_RP.status==="TRIPONE")
-             {
-                 Alert.alert("TRIPONE DETECTED");
-                 handleSendLocToRider(position.coords.latitude,position.coords.longitude);
-             }
              
-                 dispatch(Actions.handleSetMyLatLong(
-                    position.coords.latitude,
-                    position.coords.longitude
-                 ));
+                 //Alert.alert("TRIPONE DETECTED");
+                 //handleSendLocToRider(position.coords.latitude,position.coords.longitude);
+            dispatch(Actions.sendMyLocBookToRider(position.coords.latitude,position.coords.longitude));
+             
+            dispatch(Actions.handleSetMyLatLong(
+            position.coords.latitude,
+            position.coords.longitude
+            ));
              
             console.log("/////////////////////////////////////");
             console.log("/////////////////////////////////////");
             }, 
-            error => console.log(error),
+            error => console.log("ERROR SPECIAL"+error),
             { 
               enableHighAccuracy: true,
               timeout: 20000,
@@ -70,6 +69,13 @@ const secondGrid=(props)=>{
     //Handle send locs to rider starts here.......
     const handleSendLocToRider=async (lat,long)=>{
 
+       
+        if(request_RP.status!=="TRIPONE")
+        {
+            return;
+        }
+        Alert.alert("TRIP ONE DETECTED");
+        
         const riderId=request_RP.riderId;
 
         //config setup......
@@ -198,6 +204,7 @@ const secondGrid=(props)=>{
             console.log("&&&&&&&&&&&&&&&&&&&&&&&");
             console.log("&&&&&&&&&&&&&&&&&&&&&&&&");
             console.log("&&&&&&&&&&&&&&&&&&&&&&&&");
+            Alert.alert("RIDER LOC RECEIVED");
             console.log(data.lat);
             console.log(data.long);
 
