@@ -85,6 +85,10 @@ const Request=(props)=>{
                         mainGUI=(<PendingView request={request_RP} />);
                     break;
 
+                    case "RECEIVECASH":
+                        mainGUI=(<PendingView request={request_RP}/>);
+                        break;
+
                 case "NOTRESPONDED":
                     mainGUI=(
                         <React.Fragment>

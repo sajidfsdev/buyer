@@ -332,3 +332,25 @@ export const sendMyLocBookToRider=(lat,long)=>{
     //return ends here.......
 }
 //Hanle set my Loc BOOK to Rider ends here........
+
+
+
+
+
+
+//Handle Update Complete Request Status starts here........
+export const handleUpdateCompleteRequestStatus=(status)=>{
+    //return starts here.......
+    return (dispatch,getState)=>{
+        const request=JSON.parse(JSON.stringify(getState().request.request));
+        request.status=status;
+        dispatch({
+            type:Types.UPDATEREQUEST,
+            payload:{
+                request:JSON.parse(JSON.stringify(request))
+            }
+        });
+    }
+    //return ends here.........
+}
+//Handle Update Complete Request Status ends here..........

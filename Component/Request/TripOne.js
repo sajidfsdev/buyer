@@ -9,8 +9,12 @@ import MapKey from '../../Constants/Maps';
 import axios from 'axios';
 import AppLoading from '../../Reusable/AppLoading';
 import API from '../../Constants/API';
+import * as Types from '../../Store/Types/Request';
+import * as Actions from '../../Store/Actions/Request';
 
 const TripOneView=(props)=>{
+
+    const dispatch=useDispatch();
 
     //state management starts here.....
     const [mapRef,setMapRef]=useState();
@@ -27,6 +31,62 @@ const TripOneView=(props)=>{
     const request_RP=useSelector(state=>state.request.request);
     const token_RP=useSelector(state=>state.auth.token);
     //redux state ends here.......
+
+
+    //Handle coe validation starts here.........
+    const handleCodeValidation=async ()=>{
+
+        if(codeState===enteredCodeState)
+        {
+            //sending HTTP Request starts......
+            const config={
+                headers:{
+                    'Content-Type':'application/json',
+                    'b-auth-humtoken':token_RP
+                }
+            };
+
+            const body=JSON.stringify({
+                requestId:request_RP._id
+            });
+
+            //try catch starts here.....
+            try
+            {
+                const res=await axios.post(API.server+"/buyer/request/approveCode",body,config);
+
+                if(res)
+                {
+                    
+                    dispatch(Actions.handleUpdateCompleteRequestStatus("RECEIVECASH"));
+                    
+                }
+                else
+                {
+                    Alert.alert("Failed","Network Error");
+                }
+            }
+            catch(err)
+            {
+                if(err.response)
+                {
+                    Alert.alert("Failed",err.response.data.errorMessage);
+                }
+                else
+                {
+                    Alert.alert("Failed",err.message);
+                }
+            }
+            //try catch ends here.......
+
+            //sending HTTP Request ens here....
+        }
+        else
+        {
+            Alert.alert("Code Authentication Failed");
+        }
+    }
+    //Handle code validation ends here..........
 
 
     //Handle Cancel Ride Starts....
@@ -55,7 +115,7 @@ const TripOneView=(props)=>{
             {
                 setAppState(3);
                 setCodeState(res.data.code);
-                setEnteredCodeState(res.data.code);
+                //setEnteredCodeState(res.data.code);
             }
             else
             {
@@ -270,7 +330,7 @@ const TripOneView=(props)=>{
                     {/* Button View Starts Here........ */}
                     <View style={styles.tvBtnView}>
                         <Button onPress={()=>{setAppState(1);setEnteredCodeState("");setCodeState(null)}} title="Cancel" color="blue"/>
-                        <Button title="Check" color="green"/>
+                        <Button onPress={handleCodeValidation} title="Check" color="green"/>
                     </View>
                     {/* Button View Ends Here.......... */}
 
