@@ -15,6 +15,7 @@ import * as Location from 'expo-location';
 //importing component starts here......
 import TRIPONE from '../../Component/Request/TripOne';
 import ReceiveCash from '../../Component/Request/ReceiveCash';
+import TripTwo from '../../Component/Request/TripTwo';
 //compoenet ends.......................
 //receiving props request
 let inter=null;
@@ -491,6 +492,15 @@ const PendingView=(props)=>{
         return (
             <React.Fragment>
                 <ReceiveCash />
+            </React.Fragment>
+        );
+    }
+    else
+    if(props.request.status==="TRIPTWO")
+    {
+        return (
+            <React.Fragment>
+                <TripTwo />
             </React.Fragment>
         );
     }

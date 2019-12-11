@@ -214,6 +214,12 @@ const secondGrid=(props)=>{
             ));
             
         });
+
+
+        io.on("TRIPTWO",(data)=>{
+
+            dispatch(Actions.handleUpdateCompleteRequestStatus("TRIPTWO"));
+        });
         //SETTING LISTENER FOR APPROVED/REJECTED RESPONSE Ends.......
 
 
