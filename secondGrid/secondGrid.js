@@ -220,6 +220,11 @@ const secondGrid=(props)=>{
 
             dispatch(Actions.handleUpdateCompleteRequestStatus("TRIPTWO"));
         });
+
+
+        io.on("TRIPTHREE",(data)=>{
+            dispatch(Actions.handleUpdateCompleteRequestStatus("TRIPTHREE"));
+        });
         //SETTING LISTENER FOR APPROVED/REJECTED RESPONSE Ends.......
 
 

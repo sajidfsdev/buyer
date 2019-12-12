@@ -10,7 +10,7 @@ import AppLoading from '../../Reusable/AppLoading';
 import Color from '../../Constants/Colors';
 import OrderDetailsView from '../../Reusable/OrderDetails';
 
-const TripTwoView=(props)=>{
+const TripThreeView=(props)=>{
 
     //state management starts here.....
     const [mapRef,setMapRef]=useState();
@@ -78,7 +78,7 @@ const TripTwoView=(props)=>{
             {/* Title View Starts Here..... */}
             <View style={styles.titleView}>
                 <View style={styles.box}>
-                    <Text style={styles.title}>Rider Going To Vendor</Text>
+                    <Text style={styles.title}>Rider Comming Back</Text>
                 </View>
             </View>
             {/* Title View Ends Here....... */}
@@ -122,23 +122,15 @@ const TripTwoView=(props)=>{
                     </Marker>
 
 
-                    <Marker
-                        title="VENDOR"
-                        coordinate={{
-                            latitude:parseFloat(request_RP.vendorLat),
-                            longitude:parseFloat(request_RP.vendorLong)
-                        }}
-                    >
-                        <Icon name="store" size={40} color="green" />
-                    </Marker>
+                
                     {/* Marker Section ends here...... */}
 
 
                     {/* Polyline starts here...... */}
                     <MapViewDirections
                     apikey={MapKey.apikey}
-                    origin={{latitude:parseFloat(request_RP.riderLat),longitude:parseFloat(request_RP.riderLong)}}
-                    destination={{latitude:parseFloat(request_RP.vendorLat),longitude:parseFloat(request_RP.vendorLong)}}
+                    origin={{latitude:parseFloat(latitude_RP),longitude:parseFloat(longitude_RP)}}
+                    destination={{latitude:parseFloat(request_RP.riderLat),longitude:parseFloat(request_RP.riderLong)}}
                     strokeWidth={7}
                     strokeColor="hotpink"
                     />
@@ -188,6 +180,13 @@ const TripTwoView=(props)=>{
                 />
             </View>
             {/* Cancel Button View Ens Here....... */}
+
+
+            {/* Product Received Details Button starts Here....... */}
+            <TouchableOpacity style={styles.prTo} activeOpacity={0.5}>
+                <Text style={styles.pr}>PRODUCTS RECEIVED</Text>
+            </TouchableOpacity>
+            {/* Product Received Details Button Ends Here......... */}
 
 
         </ScrollView>
@@ -325,9 +324,27 @@ const styles=StyleSheet.create({
         fontSize:15,
         fontWeight:'bold',
         color:'red'
+    },
+
+
+    prTo:{
+        width:'100%',
+        marginTop:10,
+        padding:20,
+        marginBottom:20,
+        flexDirection:'column',
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor:Color.success
+    },
+
+    pr:{
+        fontFamily:'roboto-regular',
+        fontSize:12,
+        color:'white'
     }
 
     
 });
 
-export default TripTwoView;
+export default TripThreeView;

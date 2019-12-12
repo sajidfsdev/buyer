@@ -274,7 +274,7 @@ export const sendMyLocBookToRider=(lat,long)=>{
         const token=getState().auth.token;
         console.log("REDUX--&%(*(*&()&()*_)*_)*)(&(*^*&%^&$%^#^%");
         console.log(status);
-        if(status==="TRIPONE")
+        if(status==="TRIPONE" || status==="TRIPTHREE")
         {
             console.log("TRIP ONE DETECTED SUCCESSFULLY");
             const riderId=getState().request.request.riderId;

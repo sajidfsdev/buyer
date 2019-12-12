@@ -16,6 +16,7 @@ import * as Location from 'expo-location';
 import TRIPONE from '../../Component/Request/TripOne';
 import ReceiveCash from '../../Component/Request/ReceiveCash';
 import TripTwo from '../../Component/Request/TripTwo';
+import TripThree from '../../Component/Request/TripThree';
 //compoenet ends.......................
 //receiving props request
 let inter=null;
@@ -479,7 +480,7 @@ const PendingView=(props)=>{
     else
     if(props.request.status==="TRIPONE")
     {
-        return (
+        mainGUI= (
             <React.Fragment>
                 <TRIPONE />
             </React.Fragment>
@@ -489,7 +490,7 @@ const PendingView=(props)=>{
     else
     if(props.request.status==="RECEIVECASH")
     {
-        return (
+        mainGUI= (
             <React.Fragment>
                 <ReceiveCash />
             </React.Fragment>
@@ -498,9 +499,18 @@ const PendingView=(props)=>{
     else
     if(props.request.status==="TRIPTWO")
     {
-        return (
+        mainGUI= (
             <React.Fragment>
                 <TripTwo />
+            </React.Fragment>
+        );
+    }
+    else
+    if(props.request.status==="TRIPTHREE")
+    {
+        mainGUI=(
+            <React.Fragment>
+                <TripThree />
             </React.Fragment>
         );
     }

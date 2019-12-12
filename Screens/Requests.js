@@ -93,6 +93,12 @@ const Request=(props)=>{
                         mainGUI=(<PendingView request={request_RP} />);
                         break;
 
+                    case "TRIPTHREE":
+                        mainGUI=(
+                            <PendingView request={request_RP} />
+                        );
+                        break;
+
                 case "NOTRESPONDED":
                     mainGUI=(
                         <React.Fragment>
