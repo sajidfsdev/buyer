@@ -354,3 +354,27 @@ export const handleUpdateCompleteRequestStatus=(status)=>{
     //return ends here.........
 }
 //Handle Update Complete Request Status ends here..........
+
+
+
+
+
+//Handle set Show Bill starts here........
+export const handleShowBillScreen=(fare)=>{
+
+    //return starts here......
+    return (dispatch,getState)=>{
+        const request=JSON.parse(JSON.stringify(getState().request.request));
+        request.status="SHOWBILL";
+        request.fare=JSON.parse(JSON.stringify(fare));
+
+        dispatch({
+            type:Types.UPDATEREQUEST,
+            payload:{
+                request:JSON.parse(JSON.stringify(request))
+            }
+        });
+    }
+    //return ends here........
+}
+//Handle st show Bill ends here...........

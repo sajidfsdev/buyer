@@ -1,5 +1,5 @@
 import React,{ useState } from 'react';
-import { View,Text,StyleSheet,ScrollView,Dimensions,TouchableOpacity, Button } from 'react-native';
+import { View,Text,StyleSheet,ScrollView,Dimensions,TouchableOpacity, Button, Alert } from 'react-native';
 import MapView,{ PROVIDER_GOOGLE,Marker, PROVIDER_DEFAULT } from 'react-native-maps';
 import { useSelector,useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -9,19 +9,85 @@ import MapKey from '../../Constants/Maps';
 import AppLoading from '../../Reusable/AppLoading';
 import Color from '../../Constants/Colors';
 import OrderDetailsView from '../../Reusable/OrderDetails';
+import axios from 'axios';
+import API from '../../Constants/API';
+import * as Actions from '../../Store/Actions/Request';
 
 const TripThreeView=(props)=>{
+
+    const dispatch=useDispatch();
 
     //state management starts here.....
     const [mapRef,setMapRef]=useState();
     const [detailsState,setDetailsState]=useState(false);
+    const [appState,setAppState]=useState(1);//1 default 2 loading
     //state management ends here.......
 
     //redux state starts here.....
     const latitude_RP=useSelector(state=>state.request.latitude);
     const longitude_RP=useSelector(state=>state.request.longitude);
     const request_RP=useSelector(state=>state.request.request);
+    const token_RP=useSelector(state=>state.auth.token);
     //redux state ends here.......
+
+
+    //Handle products received starts here.....
+    const handleProductsReceived=async ()=>{
+
+        setAppState(2);
+
+        //config setup...
+        const config={
+            headers:{
+                'Content-Type':'application/json',
+                'b-auth-humtoken':token_RP
+            }
+        };
+
+        //body starts here.....
+        const body=JSON.stringify({
+            requestId:request_RP._id
+        });
+
+        //try catch starts here.....
+        try
+        {
+            const res=await axios.post(API.server+"/buyer/request/productsReceived",body,config);
+
+            if(res)
+            {
+                setAppState(1);
+                console.log("------------------");
+                console.log(res.data.data);
+                console.log("-------------------");
+
+                dispatch(Actions.handleShowBillScreen(
+                    JSON.parse(JSON.stringify(res.data.data))
+                ));
+                
+
+            }
+            else
+            {
+                setAppState(1);
+            }
+        }
+        catch(err)
+        {
+            setAppState(1);
+            if(err.response)
+            {
+                Alert.alert("Failed",err.response.data.errorMessage);
+            }
+            else
+            {
+                Alert.alert("Failed",err.message);
+            }
+        }
+        //try catch ends here.......
+
+    }
+    //Handle products received ends here.......
 
 
     //Handle Cancel Ride Starts....
@@ -62,6 +128,15 @@ const TripThreeView=(props)=>{
     let mainGUI=null;
 
     if(latitude_RP==null || longitude_RP==null)
+    {
+        mainGUI=(
+            <React.Fragment>
+                <AppLoading />
+            </React.Fragment>
+        );
+    }
+    else
+    if(appState===2)
     {
         mainGUI=(
             <React.Fragment>
@@ -183,7 +258,7 @@ const TripThreeView=(props)=>{
 
 
             {/* Product Received Details Button starts Here....... */}
-            <TouchableOpacity style={styles.prTo} activeOpacity={0.5}>
+            <TouchableOpacity onPress={handleProductsReceived} style={styles.prTo} activeOpacity={0.5}>
                 <Text style={styles.pr}>PRODUCTS RECEIVED</Text>
             </TouchableOpacity>
             {/* Product Received Details Button Ends Here......... */}
