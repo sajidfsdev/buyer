@@ -86,6 +86,13 @@ const requestReducer=(state=initialState,action)=>{
             };
             break;
 
+        case Types.CLEAR_ALL_LOGS:
+            return {
+                ...state,
+                request:{}
+            };
+            break;
+
 
 
     }//switch statement ends here.....

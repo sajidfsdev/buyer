@@ -105,6 +105,12 @@ const Request=(props)=>{
                         );
                         break;
 
+                    case "FINISH":
+                        mainGUI=(
+                            <PendingView request={request_RP} />
+                        );
+                        break;
+
                 case "NOTRESPONDED":
                     mainGUI=(
                         <React.Fragment>

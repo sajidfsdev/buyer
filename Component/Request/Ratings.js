@@ -1,23 +1,93 @@
 import React,{ useState } from 'react';
-import { View,Text,StyleSheet,TouchableOpacity } from 'react-native';
+import { View,Text,StyleSheet,TouchableOpacity,Alert } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import axios from 'axios';
+import API from '../../Constants/API';
+import * as Types from '../../Store/Types/Request';
+import AppLoading from '../../Reusable/AppLoading';
+import { useSelector,useDispatch } from 'react-redux';
+
 
 //changing import starts...
-import Color from '../Constants/Colors';
+import Color from '../../Constants/Colors';
 
 
 const Testing=(props)=>{
 
     //ratigs state management starts here....
     const [ratings,setRatings]=useState(3);
+    const [bufferringState,setBifferringState]=useState(false);
     //ratings state management ends here......
+
+    //redux state starts here....
+    const dispatch=useDispatch();
+    const token_RP=useSelector(state=>state.auth.token);
+    const request_RP=useSelector(state=>state.request.request);
+    ///redux state ends here.....
+
+
+    //Handle Go Bact Starts here.....
+    const handleGoBack=async ()=>{
+
+        setBifferringState(true);
+
+        //config....
+        const config={headers:{'Content-Type':'application/json','b-auth-humtoken':token_RP}};
+
+        //setting body...
+        const body=JSON.stringify({requestId:request_RP._id,rating:ratings});
+
+        //try catch starts here.....
+        try
+        {
+            const res=await axios.post(API.server+"/buyer/request/rate",body,config);
+
+            if(res)
+            {
+                //setBifferringState(false);
+
+                dispatch({type:Types.REQUESTLOADEDWITHERROR,payload:{
+                    errorMessage:"There Is No Pending Request"
+                }});
+            }
+            else
+            {
+                setBifferringState(false);
+                Alert.alert("Failed","NETWORK ERROR");
+            }
+        }
+        catch(err)
+        {
+            setBifferringState(false);
+            if(err.response)
+            {
+                Alert.alert("Failed",err.response.data.errorMessage);
+            }
+            else
+            {
+                Alert.alert("Failed",err.message);
+            }
+        }
+        //try catch ends here.......
+    }
+    //Handle Go Back ends here.......
 
 
 
     const ratingCompleted=(rat)=>{
         setRatings(rat);
       }
+
+
+      //detecting the bufferring state starts here.....
+      if(bufferringState===true)
+      {
+          return (
+              <AppLoading/>
+          );
+      }
+      //detecting the bufferring state ends here.......
 
     
 
@@ -50,7 +120,7 @@ const Testing=(props)=>{
 
 
                     {/* Go Back Button Starts Here..... */}
-                    <TouchableOpacity style={styles.to} activeOpacity={0.5}>
+                    <TouchableOpacity onPress={handleGoBack} style={styles.to} activeOpacity={0.5}>
                         <Text style={styles.toText}>
                             GO BACK
                         </Text>

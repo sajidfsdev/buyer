@@ -18,6 +18,7 @@ import ReceiveCash from '../../Component/Request/ReceiveCash';
 import TripTwo from '../../Component/Request/TripTwo';
 import TripThree from '../../Component/Request/TripThree';
 import ShowBill from '../../Component/Request/ShowBill';
+import Ratings from '../../Component/Request/Ratings';
 //compoenet ends.......................
 //receiving props request
 let inter=null;
@@ -521,6 +522,15 @@ const PendingView=(props)=>{
         mainGUI=(
             <React.Fragment>
                 <ShowBill />
+            </React.Fragment>
+        );
+    }
+    else
+    if(props.request.status==="FINISH")
+    {
+        mainGUI=(
+            <React.Fragment>
+                <Ratings />
             </React.Fragment>
         );
     }
