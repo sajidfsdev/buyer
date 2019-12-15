@@ -16,6 +16,10 @@ import onlyVendorDetailsScreen from '../Reusable/onlyVendorDetails';
 
 import CartScreen from '../Screens/cart';
 
+//History stack starts here.......
+import HistoryScreen from '../Screens/History/main';
+import HistoryDetails from '../Screens/History/HistoryDetails';
+
 //components inport....
 import CatScreen from '../Screens/Cat';
 import SubCatScreen from '../Screens/SubCat';
@@ -430,6 +434,46 @@ const requestStack=createStackNavigator({
 });
 
 
+////////////////////////////////////////////////////////
+/////////////////HISTORY STACK STARTS HERE
+////////////////////////////////////////////////////////
+const HistoryStack=createStackNavigator({
+    main:{
+        screen:HistoryScreen,
+        navigationOptions:{
+            headerTintColor:'white',
+            headerTitle:"History",
+            headerTitleStyle:{
+                fontFamily:'roboto-regular',
+                fontWeight:'200'
+            },
+
+            headerStyle:{
+                backgroundColor:Color.welcomeBack
+            }
+
+        }
+    },
+
+    purchasehistory:{
+        screen:HistoryDetails,
+        navigationOptions:{
+            headerTintColor:'white',
+            headerTitle:"Details",
+            headerTitleStyle:{
+                fontFamily:'roboto-regular',
+                fontWeight:'200'
+            },
+
+            headerStyle:{
+                backgroundColor:Color.welcomeBack
+            }
+
+        }
+    }
+});
+
+
 
 
 //////////////////////////////////////////////////////////
@@ -466,6 +510,7 @@ const drawerNav=createDrawerNavigator({
               }
         }
     },
+
 
 
 
@@ -560,7 +605,37 @@ const drawerNav=createDrawerNavigator({
                 );
               }
         }
-    }
+    },
+
+
+    HISTORY:{
+        screen:HistoryStack,
+        navigationOptions:{
+            headerStyle: {
+                backgroundColor: '#f4511e',
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                color: 'white',
+              },
+              labelStyle:{
+                  textAlign:'center',
+                  fontFamily:'roboto-regular',
+                  fontWeight:'300',
+                  fontSize:30
+              },
+              
+              drawerIcon:(config)=>{
+                return (
+                    <Icons
+                        name="history"
+                        size={25}
+                        color={config.tintColor}
+                    />
+                );
+              }
+        }
+    },
     
 },
 ////////////////////
